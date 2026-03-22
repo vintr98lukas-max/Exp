@@ -2,19 +2,5 @@
   "name": "healthy-lifestyle-gamification-app",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "install:all": "npm install",
-    "dev": "vite",
-    "build": "vite build",
-    "start": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.4.1",
-    "vite": "^5.4.14"
-  }
+  "type": "module"
 }
