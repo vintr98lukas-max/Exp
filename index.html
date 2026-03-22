@@ -7,10 +7,654 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <title>Life XP</title>
-    <link rel="stylesheet" href="./src/styles.css" />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "SF Pro Display", "Segoe UI", sans-serif;
+        --bg-top: #f5f0e8;
+        --bg-bottom: #d9e7dd;
+        --surface: rgba(255, 255, 255, 0.82);
+        --surface-strong: #ffffff;
+        --ink: #18211c;
+        --muted: #66756b;
+        --line: rgba(24, 33, 28, 0.08);
+        --accent: #2d8a56;
+        --accent-strong: #1e6a41;
+        --danger: #b24635;
+        --shadow: 0 24px 60px rgba(40, 57, 47, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top, rgba(255, 255, 255, 0.8), transparent 35%),
+          linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+        color: var(--ink);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      .app-shell {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 24px 16px 48px;
+      }
+
+      .phone-frame {
+        width: min(100%, 430px);
+        display: grid;
+        gap: 16px;
+      }
+
+      .hero-card,
+      .feedback-card,
+      .form-card,
+      .stat-card,
+      .breakdown-card {
+        background: var(--surface);
+        backdrop-filter: blur(18px);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card {
+        padding: 24px;
+      }
+
+      .hero-card h1 {
+        margin: 8px 0 12px;
+        font-size: clamp(2rem, 6vw, 2.5rem);
+        line-height: 0.94;
+        letter-spacing: -0.04em;
+      }
+
+      .eyebrow,
+      .section-label,
+      .stat-card p,
+      .breakdown-item span,
+      label {
+        color: var(--muted);
+      }
+
+      .eyebrow,
+      .section-label {
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+
+      .hero-copy,
+      .feedback-copy {
+        margin: 0;
+        line-height: 1.5;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .stat-card {
+        padding: 18px;
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 1.8rem;
+        letter-spacing: -0.04em;
+      }
+
+      .stat-card.accent {
+        background: linear-gradient(180deg, rgba(45, 138, 86, 0.92), rgba(30, 106, 65, 0.96));
+        color: #f6fff9;
+      }
+
+      .stat-card.accent p,
+      .stat-card.accent strong {
+        color: inherit;
+      }
+
+      .feedback-card,
+      .form-card,
+      .breakdown-card {
+        padding: 20px;
+      }
+
+      .score-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .form-card {
+        display: grid;
+        gap: 16px;
+      }
+
+      .form-row {
+        display: grid;
+        gap: 12px;
+      }
+
+      .form-row.double {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      label {
+        display: grid;
+        gap: 8px;
+        font-size: 0.92rem;
+        font-weight: 600;
+      }
+
+      input,
+      select {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px 16px;
+        background: var(--surface-strong);
+        color: var(--ink);
+      }
+
+      input[type="range"] {
+        padding: 0;
+        accent-color: var(--accent);
+      }
+
+      .range-value {
+        font-size: 1rem;
+        color: var(--ink);
+      }
+
+      .breakdown-grid {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .breakdown-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .submit-button {
+        border: 0;
+        border-radius: 18px;
+        padding: 16px;
+        background: var(--ink);
+        color: #f5fff7;
+        font-weight: 700;
+      }
+
+      .submit-button:disabled {
+        opacity: 0.7;
+      }
+
+      .fatal-card {
+        border-color: rgba(178, 70, 53, 0.35);
+      }
+
+      .fatal-pre {
+        white-space: pre-wrap;
+        color: #b24635;
+        margin: 16px 0 0;
+      }
+
+      @media (max-width: 420px) {
+        .app-shell {
+          padding-inline: 12px;
+        }
+
+        .form-row.double,
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .score-line {
+          flex-direction: column;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./src/main.js"></script>
+    <script>
+      const STORAGE_KEY = "life-xp-entries";
+      const WORKOUT_XP = {
+        rehab: 20,
+        light: 20,
+        normal: 40,
+        hard: 60,
+      };
+
+      const defaultEntry = {
+        date: new Date().toISOString().slice(0, 10),
+        workoutType: "light",
+        workoutDuration: 30,
+        steps: 6000,
+        runningUnit: "minutes",
+        runningValue: 10,
+        foodQuality: 3,
+      };
+
+      const state = {
+        entries: loadEntries(),
+        feedback: "Log the day, earn the XP, then read the truth.",
+        isSubmitting: false,
+      };
+
+      state.form = getTodayEntry(state.entries);
+
+      function loadEntries() {
+        try {
+          const raw = window.localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveEntries(entries) {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      }
+
+      function getTodayEntry(entries) {
+        const today = new Date().toISOString().slice(0, 10);
+        return entries.find((entry) => entry.date === today) || { ...defaultEntry, date: today };
+      }
+
+      function getWorkoutXp(type, duration) {
+        if (!type || Number(duration) <= 0) return 0;
+        return WORKOUT_XP[type] || 0;
+      }
+
+      function getStepsXp(steps) {
+        const stepCount = Number(steps) || 0;
+        if (stepCount >= 10000) return 40;
+        if (stepCount >= 8000) return 30;
+        if (stepCount >= 6000) return 20;
+        return 0;
+      }
+
+      function getRunningXp(unit, value) {
+        const amount = Number(value) || 0;
+        if (amount <= 0) return 0;
+
+        if (unit === "km") {
+          if (amount >= 6) return 60;
+          if (amount >= 4) return 40;
+          if (amount >= 2) return 20;
+          return 0;
+        }
+
+        if (amount >= 30) return 60;
+        if (amount >= 20) return 40;
+        if (amount >= 10) return 20;
+        return 0;
+      }
+
+      function getFoodXp(foodQuality) {
+        const food = Number(foodQuality) || 0;
+        if (food >= 5) return 30;
+        if (food >= 4) return 20;
+        if (food >= 3) return 10;
+        return 0;
+      }
+
+      function hasActivity(entry) {
+        return (
+          getWorkoutXp(entry.workoutType, entry.workoutDuration) > 0 ||
+          (Number(entry.steps) || 0) > 0 ||
+          getRunningXp(entry.runningUnit, entry.runningValue) > 0
+        );
+      }
+
+      function isSuccessfulDay(entry) {
+        return hasActivity(entry) && (Number(entry.foodQuality) || 0) >= 3;
+      }
+
+      function getPenaltyTriggered(entry) {
+        return !hasActivity(entry) || (Number(entry.foodQuality) || 0) <= 2;
+      }
+
+      function getStreakMultiplier(streak) {
+        if (streak >= 14) return 2;
+        if (streak >= 7) return 1.5;
+        if (streak >= 3) return 1.2;
+        return 1;
+      }
+
+      function scoreEntry(entry, streakBeforeDay) {
+        const workoutXp = getWorkoutXp(entry.workoutType, entry.workoutDuration);
+        const stepsXp = getStepsXp(entry.steps);
+        const runningXp = getRunningXp(entry.runningUnit, entry.runningValue);
+        const foodXp = getFoodXp(entry.foodQuality);
+        const baseXp = workoutXp + stepsXp + runningXp + foodXp;
+        const success = isSuccessfulDay(entry);
+        const streak = success ? streakBeforeDay + 1 : 0;
+        const multiplier = success ? getStreakMultiplier(streak) : 1;
+        const penalty = getPenaltyTriggered(entry) ? -30 : 0;
+        const totalXp = Math.round(baseXp * multiplier + penalty);
+
+        return {
+          workoutXp,
+          stepsXp,
+          runningXp,
+          foodXp,
+          baseXp,
+          success,
+          streak,
+          multiplier,
+          penalty,
+          totalXp,
+        };
+      }
+
+      function evaluateHistory(entries) {
+        const sorted = [...entries].sort((a, b) => a.date.localeCompare(b.date));
+        let rollingStreak = 0;
+
+        const scoredEntries = sorted.map((entry) => {
+          const score = scoreEntry(entry, rollingStreak);
+          rollingStreak = score.streak;
+          return { ...entry, score };
+        });
+
+        const totalXp = scoredEntries.reduce((sum, entry) => sum + entry.score.totalXp, 0);
+        const latest = scoredEntries.length ? scoredEntries[scoredEntries.length - 1] : null;
+
+        return {
+          scoredEntries,
+          totalXp,
+          currentStreak: latest ? latest.score.streak : 0,
+          level: Math.max(1, Math.floor(totalXp / 500) + 1),
+          latestScore: latest ? latest.score.totalXp : 0,
+        };
+      }
+
+      function replaceEntry(entries, nextEntry) {
+        const filtered = entries.filter((entry) => entry.date !== nextEntry.date);
+        return [...filtered, nextEntry].sort((a, b) => a.date.localeCompare(b.date));
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function getHistoryWithoutCurrentDate() {
+        return state.entries.filter((entry) => entry.date !== state.form.date);
+      }
+
+      function getSummary() {
+        return evaluateHistory(state.entries);
+      }
+
+      function getPreviewScore() {
+        const streakBeforeToday = evaluateHistory(getHistoryWithoutCurrentDate()).currentStreak;
+        return {
+          streakBeforeToday,
+          score: scoreEntry(state.form, streakBeforeToday),
+        };
+      }
+
+      function statCard(label, value, accent) {
+        return `
+          <article class="stat-card${accent ? " accent" : ""}">
+            <p>${escapeHtml(label)}</p>
+            <strong>${escapeHtml(value)}</strong>
+          </article>
+        `;
+      }
+
+      function breakdown(label, value) {
+        return `
+          <div class="breakdown-item">
+            <span>${escapeHtml(label)}</span>
+            <strong>${escapeHtml(value)} XP</strong>
+          </div>
+        `;
+      }
+
+      function render() {
+        const root = document.getElementById("root");
+        if (!root) return;
+
+        const summary = getSummary();
+        const preview = getPreviewScore();
+        const previewScore = preview.score;
+
+        root.innerHTML = `
+          <main class="app-shell">
+            <section class="phone-frame">
+              <div class="hero-card">
+                <p class="eyebrow">Life XP</p>
+                <h1>Healthy lifestyle, scored like a game.</h1>
+                <p class="hero-copy">
+                  Build streaks, stack levels, and stop letting weak days hide behind excuses.
+                </p>
+              </div>
+
+              <section class="dashboard-grid">
+                ${statCard("Total XP", summary.totalXp, false)}
+                ${statCard("Level", summary.level, false)}
+                ${statCard("Streak", summary.currentStreak + " days", false)}
+                ${statCard("Daily Score", previewScore.totalXp, true)}
+              </section>
+
+              <section class="feedback-card">
+                <div>
+                  <p class="section-label">Daily evaluation</p>
+                  <p class="feedback-copy">${escapeHtml(state.feedback)}</p>
+                </div>
+                <div class="score-line">
+                  <span>${escapeHtml(previewScore.multiplier.toFixed(1) + "x streak bonus")}</span>
+                  <span>${escapeHtml(previewScore.penalty < 0 ? previewScore.penalty + " penalty" : "No penalty")}</span>
+                </div>
+              </section>
+
+              <form class="form-card" id="daily-form">
+                <div class="form-row">
+                  <label>
+                    Date
+                    <input type="date" name="date" value="${escapeHtml(state.form.date)}" />
+                  </label>
+                </div>
+
+                <div class="form-row double">
+                  <label>
+                    Workout type
+                    <select name="workoutType">
+                      <option value="rehab" ${state.form.workoutType === "rehab" ? "selected" : ""}>Rehab</option>
+                      <option value="light" ${state.form.workoutType === "light" ? "selected" : ""}>Light</option>
+                      <option value="normal" ${state.form.workoutType === "normal" ? "selected" : ""}>Normal</option>
+                      <option value="hard" ${state.form.workoutType === "hard" ? "selected" : ""}>Hard</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Duration (min)
+                    <input type="number" min="0" name="workoutDuration" value="${escapeHtml(state.form.workoutDuration)}" />
+                  </label>
+                </div>
+
+                <div class="form-row">
+                  <label>
+                    Steps
+                    <input type="number" min="0" name="steps" value="${escapeHtml(state.form.steps)}" />
+                  </label>
+                </div>
+
+                <div class="form-row double">
+                  <label>
+                    Running unit
+                    <select name="runningUnit">
+                      <option value="minutes" ${state.form.runningUnit === "minutes" ? "selected" : ""}>Minutes</option>
+                      <option value="km" ${state.form.runningUnit === "km" ? "selected" : ""}>Kilometers</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Running value
+                    <input type="number" min="0" name="runningValue" value="${escapeHtml(state.form.runningValue)}" />
+                  </label>
+                </div>
+
+                <div class="form-row">
+                  <label>
+                    Food quality (1-5)
+                    <input type="range" min="1" max="5" step="1" name="foodQuality" value="${escapeHtml(state.form.foodQuality)}" />
+                    <span class="range-value" id="food-quality-label">${escapeHtml(state.form.foodQuality)}/5</span>
+                  </label>
+                </div>
+
+                <section class="breakdown-card">
+                  <p class="section-label">Today's XP breakdown</p>
+                  <div class="breakdown-grid">
+                    ${breakdown("Workout", previewScore.workoutXp)}
+                    ${breakdown("Steps", previewScore.stepsXp)}
+                    ${breakdown("Running", previewScore.runningXp)}
+                    ${breakdown("Food", previewScore.foodXp)}
+                  </div>
+                </section>
+
+                <button class="submit-button" type="submit" ${state.isSubmitting ? "disabled" : ""}>
+                  ${state.isSubmitting ? "Saving..." : "Save daily log"}
+                </button>
+              </form>
+            </section>
+          </main>
+        `;
+
+        bindFormEvents();
+      }
+
+      function readFormState(formElement) {
+        const data = new FormData(formElement);
+        return {
+          date: String(data.get("date") || defaultEntry.date),
+          workoutType: String(data.get("workoutType") || "light"),
+          workoutDuration: Number(data.get("workoutDuration") || 0),
+          steps: Number(data.get("steps") || 0),
+          runningUnit: String(data.get("runningUnit") || "minutes"),
+          runningValue: Number(data.get("runningValue") || 0),
+          foodQuality: Number(data.get("foodQuality") || 1),
+        };
+      }
+
+      function bindFormEvents() {
+        const formElement = document.getElementById("daily-form");
+        if (!formElement) return;
+
+        formElement.oninput = function () {
+          state.form = readFormState(formElement);
+          render();
+        };
+
+        formElement.onsubmit = handleSubmit;
+      }
+
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const formElement = event.currentTarget;
+        state.form = readFormState(formElement);
+        state.isSubmitting = true;
+        render();
+
+        const preview = getPreviewScore();
+        state.entries = replaceEntry(state.entries, state.form);
+        saveEntries(state.entries);
+
+        try {
+          const response = await fetch("/api/feedback", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...state.form,
+              streakBeforeToday: preview.streakBeforeToday,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Feedback request failed: " + response.status);
+          }
+
+          const data = await response.json();
+          state.feedback = data.feedback || state.feedback;
+        } catch (error) {
+          console.error(error);
+          state.feedback =
+            "Entry saved. Backend feedback is offline, so use the numbers and be honest with yourself.";
+        } finally {
+          state.isSubmitting = false;
+          render();
+        }
+      }
+
+      function showFatalError(error) {
+        const root = document.getElementById("root");
+        if (!root) return;
+
+        root.innerHTML = `
+          <main class="app-shell">
+            <section class="phone-frame">
+              <section class="feedback-card fatal-card">
+                <div>
+                  <p class="section-label">Runtime error</p>
+                  <p class="feedback-copy">The app crashed while loading. The exact error is shown below.</p>
+                </div>
+                <pre class="fatal-pre">${escapeHtml(error && (error.stack || error.message) ? error.stack || error.message : String(error))}</pre>
+              </section>
+            </section>
+          </main>
+        `;
+      }
+
+      window.addEventListener("error", function (event) {
+        showFatalError(event.error || new Error(event.message));
+      });
+
+      window.addEventListener("unhandledrejection", function (event) {
+        showFatalError(event.reason instanceof Error ? event.reason : new Error(String(event.reason)));
+      });
+
+      try {
+        render();
+      } catch (error) {
+        showFatalError(error);
+      }
+    </script>
   </body>
 </html>

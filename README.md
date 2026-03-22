@@ -4,7 +4,7 @@ Minimal React + Vercel Functions app for healthy lifestyle gamification.
 
 ## Stack
 
-- React loaded directly in the browser through ESM modules
+- Single-file frontend in `index.html`
 - Vercel serverless API for daily feedback generation
 - Local browser storage for saved daily entries
 
